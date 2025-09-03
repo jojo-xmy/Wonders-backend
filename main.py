@@ -5,6 +5,8 @@ from config import validate_settings
 from routers import auth_router, chat_router
 import logging
 import os
+import uvicorn
+
 
 # 配置日志
 logging.basicConfig(
@@ -64,7 +66,3 @@ async def api_info():
             "chat": "/api/chat"
         }
     }
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
