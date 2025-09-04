@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from config import validate_settings
 from routers import auth_router, chat_router
+from routers.notifications import router as notifications_router
 import logging
 import os
 import uvicorn
@@ -53,6 +54,7 @@ app.add_middleware(
 # 注册路由器
 app.include_router(auth_router, prefix="/api")
 app.include_router(chat_router, prefix="/api")
+app.include_router(notifications_router, prefix="/api")
 
 # 健康检查端点
 @app.get("/")

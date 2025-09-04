@@ -8,6 +8,7 @@ from models import (
     ChatRequest, ChatResponse, ChatMessageResponse, 
     ConversationHistory, MessageRole, ErrorResponse
 )
+from .notifications import publish_notification, NotificationType
 import logging
 import uuid
 import json
@@ -89,6 +90,18 @@ async def send_message(
             content=ai_response_content,
             conversation_id=conversation_id,
             is_anonymous=current_user.get("is_anonymous", False)
+        )
+        
+        # 发布新消息通知
+        await publish_notification(
+            event_type=NotificationType.MESSAGE_RECEIVED,
+            title="收到新回复",
+            message=f"AI助手回复了您的消息",
+            metadata={
+                "conversation_id": conversation_id,
+                "message_id": ai_message["id"],
+                "user_id": user_id
+            }
         )
         
         return ChatResponse(
