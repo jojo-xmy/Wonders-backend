@@ -6,6 +6,7 @@ from routers import auth_router, chat_router
 import logging
 import os
 import uvicorn
+from typing import List
 
 
 # 配置日志
@@ -37,7 +38,13 @@ app = FastAPI(
 # 配置CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001"],  # React开发服务器
+    allow_origins=[
+        "http://localhost:3000", 
+        "http://127.0.0.1:3000", 
+        "http://localhost:3001", 
+        "http://127.0.0.1:3001",  # 本地开发服务器
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",  # 允许所有 Vercel 域名
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -66,3 +73,6 @@ async def api_info():
             "chat": "/api/chat"
         }
     }
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8001)
